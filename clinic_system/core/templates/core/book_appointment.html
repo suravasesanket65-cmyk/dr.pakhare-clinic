@@ -1,0 +1,271 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Appointment — Dr. Pakhare Dental Clinic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link href="{% static 'core/css/style.css' %}" rel="stylesheet">
+  <style>
+    /* Inline styles omitted for brevity as they are handled by style.css */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b7a75;
+      --primary-dark: #085e5a;
+      --primary-light: #e6f7f6;
+      --accent: #f5a623;
+      --accent-hover: #e0950f;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+      --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: "Inter", system-ui, -apple-system, sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+    /* ... rest of original CSS ... */
+    .header { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(0, 0, 0, 0.05); box-shadow: var(--shadow-sm); transition: box-shadow var(--transition); }
+    .header.scrolled { box-shadow: var(--shadow-md); }
+    .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--gray-900); font-weight: 700; font-size: 1.25rem; letter-spacing: -0.5px; }
+    .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), #0da39c); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: var(--white); font-size: 1.1rem; flex-shrink: 0; }
+    .nav { display: flex; align-items: center; gap: 8px; }
+    .nav a { text-decoration: none; color: var(--gray-600); font-size: 0.9rem; font-weight: 500; padding: 8px 18px; border-radius: var(--radius-sm); transition: all var(--transition); position: relative; }
+    .nav a::after { content: ""; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%) scaleX(0); width: calc(100% - 36px); height: 2px; background: var(--primary); border-radius: 2px; transition: transform var(--transition); }
+    .nav a:hover { color: var(--primary); background: var(--primary-light); }
+    .nav a:hover::after { transform: translateX(-50%) scaleX(1); }
+    .nav .btn-nav { background: var(--primary); color: var(--white) !important; padding: 8px 22px; border-radius: var(--radius-sm); font-weight: 600; box-shadow: 0 2px 8px rgba(11, 122, 117, 0.3); margin-left: 8px; }
+    .nav .btn-nav::after { display: none; }
+    .nav .btn-nav:hover { background: var(--primary-dark); box-shadow: 0 4px 16px rgba(11, 122, 117, 0.4); transform: translateY(-1px); }
+    .nav .btn-nav-active { background: var(--primary-dark); color: var(--white) !important; padding: 8px 22px; border-radius: var(--radius-sm); font-weight: 600; box-shadow: 0 2px 8px rgba(11, 122, 117, 0.3); margin-left: 8px; cursor: default; }
+    .nav .btn-nav-active::after { display: none; }
+    .nav .btn-login { background: var(--primary); color: var(--white) !important; padding: 8px 22px; border-radius: var(--radius-sm); font-weight: 600; box-shadow: 0 2px 8px rgba(11, 122, 117, 0.3); margin-left: 8px; }
+    .nav .btn-login::after { display: none; }
+    .nav .btn-login:hover { background: var(--primary-dark); box-shadow: 0 4px 16px rgba(11, 122, 117, 0.4); transform: translateY(-1px); }
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .nav-toggle span { width: 24px; height: 2px; background: var(--gray-800); border-radius: 2px; transition: all var(--transition); }
+    .page-head { padding: 48px 24px 0; text-align: center; }
+    .page-head .section-label { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); margin-bottom: 8px; }
+    .page-head h1 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.5px; color: var(--gray-900); margin-bottom: 12px; }
+    .page-head p { color: var(--gray-600); max-width: 480px; margin: 0 auto; }
+    .form-section { padding: 40px 24px 80px; }
+    .form-card { max-width: 640px; margin: 0 auto; background: var(--white); border-radius: var(--radius-lg); padding: 44px 40px; box-shadow: var(--shadow-lg); border: 1px solid rgba(0, 0, 0, 0.04); transition: box-shadow var(--transition); }
+    .form-card:hover { box-shadow: var(--shadow-xl); }
+    .form-group { margin-bottom: 22px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-800); margin-bottom: 6px; }
+    .form-control { width: 100%; padding: 12px 16px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 0.95rem; font-family: inherit; color: var(--gray-800); background: var(--white); transition: all var(--transition); outline: none; }
+    .form-control::placeholder { color: var(--gray-400); }
+    .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(11, 122, 117, 0.12); }
+    select.form-control { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234b5563' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+    textarea.form-control { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+    .input-with-icon { position: relative; }
+    .input-with-icon .form-control { padding-left: 42px; }
+    .input-with-icon .icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 1.1rem; pointer-events: none; }
+    .btn-submit { width: 100%; padding: 14px; font-size: 1rem; background: var(--primary); color: var(--white); border: none; border-radius: var(--radius-sm); font-weight: 600; font-family: inherit; cursor: pointer; transition: all var(--transition); box-shadow: 0 4px 16px rgba(11, 122, 117, 0.3); display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; }
+    .btn-submit:hover { background: var(--primary-dark); box-shadow: 0 6px 24px rgba(11, 122, 117, 0.4); transform: translateY(-2px); }
+    .btn-submit:active { transform: translateY(0); }
+    .footer { margin-top: auto; background: var(--gray-900); color: rgba(255, 255, 255, 0.8); padding: 56px 24px 32px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
+    .footer-brand h3 { color: var(--white); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .footer-brand p { font-size: 0.9rem; line-height: 1.7; color: rgba(255, 255, 255, 0.6); max-width: 300px; }
+    .footer-col h4 { color: var(--white); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 18px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li { font-size: 0.9rem; color: rgba(255, 255, 255, 0.55); display: flex; align-items: center; gap: 10px; transition: color var(--transition); }
+    .footer-col ul li:hover { color: rgba(255, 255, 255, 0.85); }
+    .footer-col ul li .fi { width: 20px; text-align: center; flex-shrink: 0; font-size: 1rem; }
+    .footer-col ul li a { color: inherit; text-decoration: none; }
+    .footer-col ul li a:hover { color: var(--accent); }
+    .footer-bottom { max-width: 1200px; margin: 40px auto 0; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.85rem; color: rgba(255, 255, 255, 0.4); }
+    .footer-bottom-links { display: flex; gap: 20px; }
+    .footer-bottom-links a { color: rgba(255, 255, 255, 0.4); text-decoration: none; transition: color var(--transition); }
+    .footer-bottom-links a:hover { color: rgba(255, 255, 255, 0.7); }
+    @media (max-width: 768px) {
+      .nav { display: none; position: absolute; top: 68px; left: 0; right: 0; background: var(--white); flex-direction: column; padding: 16px 24px 24px; box-shadow: var(--shadow-lg); border-bottom: 1px solid var(--gray-200); gap: 4px; }
+      .nav.open { display: flex; }
+      .nav a { width: 100%; padding: 12px 16px; }
+      .nav a::after { display: none; }
+      .nav .btn-nav, .nav .btn-nav-active, .nav .btn-login { margin-left: 0; text-align: center; margin-top: 4px; }
+      .nav-toggle { display: flex; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-card { padding: 32px 24px; }
+      .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ═══ Header ═══ -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="{% url 'index' %}" class="logo">
+        <span class="logo-icon">&#9900;</span>
+        Dr. Pakhare
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="nav">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'register_patient' %}">Register</a>
+        <a href="{% url 'book_appointment' %}" class="btn-nav-active">Appointments</a>
+        <a href="{% url 'login' %}" class="btn-login">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ═══ Page heading ═══ -->
+  <div class="page-head">
+    <p class="section-label">Schedule</p>
+    <h1>Book an appointment</h1>
+    <p>Choose your preferred doctor, date and time, and we&rsquo;ll take care of the rest.</p>
+  </div>
+
+  <!-- ═══ Form ═══ -->
+  <section class="form-section">
+    <div class="form-card">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show text-center" role="alert">
+            <i class="bi bi-info-circle-fill me-2"></i>{{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <form id="appointmentForm" action="{% url 'book_appointment' %}" method="POST">
+        {% csrf_token %}
+        {% if request.session.role != 'Patient' %}
+        <div class="form-group">
+          <label for="patientId">Patient ID</label>
+          <input type="number" class="form-control" id="patientId" name="PatientID" placeholder="1024" required />
+        </div>
+        {% endif %}
+        <div class="form-group">
+          <label for="doctorId">Assign Doctor <span class="text-danger">*</span></label>
+          <select class="form-control" id="doctorId" name="DoctorID" required>
+            <option value="">Select an Active Doctor...</option>
+            {% for doc in doctors %}
+            <option value="{{ doc.DoctorID }}">{{ doc.DoctorName }} — {{ doc.Specialization }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">Date <span class="text-danger">*</span></label>
+            <input type="date" class="form-control" id="date" name="AppointmentDate" required />
+          </div>
+          <div class="form-group">
+            <label for="time">Time Slot (30-min Intervals) <span class="text-danger">*</span></label>
+            <select class="form-control" id="time" name="AppointmentTime" required>
+              <option value="">Select slot...</option>
+              <option value="09:00">09:00 AM</option>
+              <option value="09:30">09:30 AM</option>
+              <option value="10:00">10:00 AM</option>
+              <option value="10:30">10:30 AM</option>
+              <option value="11:00">11:00 AM</option>
+              <option value="11:30">11:30 AM</option>
+              <option value="12:00">12:00 PM</option>
+              <option value="12:30">12:30 PM</option>
+              <option value="13:00">01:00 PM</option>
+              <option value="13:30">01:30 PM</option>
+              <option value="14:00">02:00 PM</option>
+              <option value="14:30">02:30 PM</option>
+              <option value="15:00">03:00 PM</option>
+              <option value="15:30">03:30 PM</option>
+              <option value="16:00">04:00 PM</option>
+              <option value="16:30">04:30 PM</option>
+              <option value="17:00">05:00 PM</option>
+              <option value="17:30">05:30 PM</option>
+              <option value="18:00">06:00 PM</option>
+              <option value="18:30">06:30 PM</option>
+              <option value="19:00">07:00 PM</option>
+              <option value="19:30">07:30 PM</option>
+              <option value="20:00">08:00 PM</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="purpose">Purpose</label>
+          <textarea class="form-control" id="purpose" name="Purpose" rows="3" placeholder="Reason for visit…" required></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Book Appointment</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h3><span style="color:var(--primary)">&#9900;</span> Dr. Pakhare</h3>
+        <p>Modern dental care built around your comfort. We treat every patient like family.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><span class="fi">&#9742;</span> (555) 123-4567</li>
+          <li><span class="fi">&#9993;</span> hello@brightsmile.com</li>
+          <li><span class="fi">&#128205;</span> 123 Main St, Suite 100</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Hours</h4>
+        <ul>
+          <li><span class="fi">&#128338;</span> Mon – Fri — 8:00 AM – 6:00 PM</li>
+          <li><span class="fi">&#128338;</span> Saturday — 9:00 AM – 3:00 PM</li>
+          <li><span class="fi">&#128683;</span> Sunday — Closed</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Quick links</h4>
+        <ul>
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li><a href="{% url 'register_patient' %}">Register</a></li>
+          <li><a href="{% url 'book_appointment' %}">Appointments</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Dr. Pakhare Dental Clinic. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms of service</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById("navToggle");
+    const nav = document.getElementById("nav");
+    toggle.addEventListener("click", () => nav.classList.toggle("open"));
+
+    const header = document.getElementById("header");
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          header.classList.toggle("scrolled", window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    const dateInput = document.getElementById("date");
+    const today = new Date();
+    dateInput.setAttribute("min", today.toISOString().split("T")[0]);
+  </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+{% extends 'core/dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Patient Directory - Dr. Pakhare Dental{% endblock %}
+
+{% block extra_css %}
+<style>
+    .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .page-header h1 {
+        font-size: 26px;
+        font-weight: 700;
+        margin: 0;
+        color: var(--secondary);
+    }
+
+    .table-custom {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+    .table-custom th {
+        color: var(--text-muted);
+        font-weight: 600;
+        font-size: 14px;
+        padding: 0 15px 10px;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .table-custom td {
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.6);
+        vertical-align: middle;
+    }
+
+    .table-custom tr td:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .table-custom tr td:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+
+    .table-custom tr:hover td {
+        background: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-add {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 180, 219, 0.3);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="glass-card">
+    <div class="page-header">
+        <div>
+            <h1><i class="fa-solid fa-users me-2"></i>Patient Directory</h1>
+            <p class="text-muted mb-0">Master list of all registered clinic patients</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'register_patient' %}" class="btn-add"><i class="fa-solid fa-user-plus me-2"></i>Add New Patient</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Patient Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Blood Group</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td class="fw-bold text-secondary">#{{ patient.PatientID }}</td>
+                    <td class="fw-bold d-flex align-items-center gap-2">
+                        {% if patient.Photo %}
+                        <img src="{{ patient.Photo.url }}" alt="Photo" class="rounded-circle"
+                            style="width: 36px; height: 36px; object-fit: cover;">
+                        {% else %}
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center text-secondary border"
+                            style="width: 36px; height: 36px;">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        {% endif %}
+                        <span>{{ patient.FirstName }} {{ patient.LastName }}</span>
+                    </td>
+                    <td>{{ patient.Email }}</td>
+                    <td>{{ patient.Mobile }}</td>
+                    <td><span class="badge bg-light text-dark border">{{ patient.BloodGroup|default:"N/A" }}</span></td>
+                    <td>
+                        <a href="{% url 'book_appointment' %}"
+                            class="btn btn-sm btn-outline-primary rounded-pill px-3">Book Appt</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">No registered patients found in directory.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

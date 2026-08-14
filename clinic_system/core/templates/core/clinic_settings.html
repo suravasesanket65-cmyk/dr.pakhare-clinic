@@ -1,0 +1,121 @@
+{% extends 'core/dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Clinic Settings - Dr. Pakhare Dental{% endblock %}
+
+{% block extra_css %}
+<style>
+    .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 35px;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 10px 35px rgba(31, 38, 135, 0.08);
+        max-width: 750px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+        padding-bottom: 15px;
+    }
+
+    .page-header h1 {
+        font-size: 26px;
+        font-weight: 700;
+        margin: 0;
+        color: var(--secondary);
+    }
+
+    .form-label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--text-dark);
+    }
+
+    .form-control {
+        border-radius: 12px;
+        padding: 12px 15px;
+        border: 1px solid #ced4da;
+        transition: all 0.2s;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.2rem rgba(0, 180, 219, 0.25);
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 180, 219, 0.3);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="glass-card">
+    <div class="page-header">
+        <div>
+            <h1><i class="fa-solid fa-gear me-2"></i>Clinic Settings</h1>
+            <p class="text-muted mb-0">Manage global clinic profile, address, and billing tax credentials</p>
+        </div>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-md-12">
+                <label class="form-label">Clinic Name <span class="text-danger">*</span></label>
+                <input type="text" name="ClinicName" class="form-control" value="{{ settings.ClinicName }}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Phone / Hotline <span class="text-danger">*</span></label>
+                <input type="text" name="Phone" class="form-control" value="{{ settings.Phone }}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Official Email <span class="text-danger">*</span></label>
+                <input type="email" name="Email" class="form-control" value="{{ settings.Email }}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">GST / Tax Identification Number <span class="text-danger">*</span></label>
+                <input type="text" name="GSTNumber" class="form-control" value="{{ settings.GSTNumber }}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Working Hours <span class="text-danger">*</span></label>
+                <input type="text" name="WorkingHours" class="form-control" value="{{ settings.WorkingHours }}" required>
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Clinic Address <span class="text-danger">*</span></label>
+                <textarea name="Address" class="form-control" rows="3" required>{{ settings.Address }}</textarea>
+            </div>
+        </div>
+
+        <div class="mt-4 text-end">
+            <button type="submit" class="btn-save"><i class="fa-solid fa-floppy-disk me-2"></i>Save Settings</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

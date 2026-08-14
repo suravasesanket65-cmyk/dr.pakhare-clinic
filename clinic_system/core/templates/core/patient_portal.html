@@ -1,0 +1,165 @@
+{% extends 'core/patient_base.html' %}
+{% load static %}
+
+{% block title %}My Portal - Dr. Pakhare Dental Clinic{% endblock %}
+
+{% block content %}
+<!-- Welcome Header -->
+<div class="portal-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1>Welcome back, {{ patient.FirstName }}!</h1>
+                <p>Manage your dental health, view past treatments, and track your invoices all in one place.</p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="{% url 'book_appointment' %}" class="btn-book"><i
+                        class="fa-solid fa-calendar-plus me-2"></i>Book New Appointment</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- My Appointments Module -->
+    <div class="glass-card">
+        <h3 class="card-title"><i class="fa-solid fa-calendar-check text-primary"></i> My Appointments</h3>
+
+        {% if appointments %}
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Purpose</th>
+                        <th>Status</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appt in appointments %}
+                    <tr>
+                        <td class="fw-bold">{{ appt.AppointmentDate|date:"d M Y" }}</td>
+                        <td>{{ appt.AppointmentTime|time:"H:i" }}</td>
+                        <td>{{ appt.Purpose }}</td>
+                        <td>
+                            {% if appt.Status == 'Completed' %}
+                            <span class="status-badge status-treated"><i class="fa-solid fa-check me-1"></i> Completed</span>
+                            {% elif appt.Status == 'Cancelled' %}
+                            <span class="status-badge bg-secondary text-white"><i class="fa-solid fa-ban me-1"></i> Cancelled</span>
+                            {% else %}
+                            <span class="status-badge status-scheduled"><i class="fa-solid fa-clock me-1"></i> {{ appt.Status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            {% if appt.Status == 'Scheduled' %}
+                            <a href="{% url 'cancel_appointment' appt.AppointmentID %}"
+                                onclick="return confirm('Are you sure you want to cancel this appointment?');"
+                                class="btn btn-sm btn-outline-danger rounded-pill px-3"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
+                            {% else %}
+                            <span class="text-muted small">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center text-muted py-4">
+            <i class="fa-solid fa-calendar-xmark fs-2 mb-3"></i>
+            <p>You have no appointments yet.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row g-4">
+        <!-- My Prescriptions Module -->
+        <div class="col-lg-6">
+            <div class="glass-card h-100">
+                <h3 class="card-title"><i class="fa-solid fa-prescription-bottle-medical text-info"></i> My Prescriptions</h3>
+
+                {% if prescriptions %}
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Medicine</th>
+                                <th>Date</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rx in prescriptions %}
+                            <tr>
+                                <td class="fw-bold">{{ rx.MedicineName }}<br><small class="text-muted fw-normal">{{ rx.Dosage }} | {{ rx.Frequency }}</small></td>
+                                <td>{{ rx.VisitID.VisitDate|date:"d M Y" }}</td>
+                                <td class="text-end">
+                                    <a href="{% url 'print_prescription' rx.VisitID.AppointmentID.AppointmentID %}"
+                                        target="_blank" class="btn-download"><i class="fa-solid fa-download me-1"></i> PDF</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-4">
+                    <i class="fa-solid fa-capsules fs-2 mb-3"></i>
+                    <p>No prescriptions found.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- My Bills Module -->
+        <div class="col-lg-6">
+            <div class="glass-card h-100">
+                <h3 class="card-title"><i class="fa-solid fa-file-invoice-dollar text-warning"></i> My Invoices</h3>
+
+                {% if invoices %}
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for inv in invoices %}
+                            <tr>
+                                <td class="fw-bold">{{ inv.InvoiceDate|date:"d M Y" }}</td>
+                                <td>₹{{ inv.NetAmount }}</td>
+                                <td>
+                                    {% if inv.Status == 'Paid' %}
+                                    <span class="status-badge status-paid">Paid</span>
+                                    {% elif inv.Status == 'Partial' %}
+                                    <span class="status-badge status-checked-in">Partial</span>
+                                    {% else %}
+                                    <span class="status-badge bg-danger-subtle text-danger border border-danger-subtle">Unpaid</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <a href="{% url 'print_receipt' inv.VisitID.AppointmentID.AppointmentID %}"
+                                        target="_blank" class="btn-download"><i class="fa-solid fa-download me-1"></i> PDF</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-4">
+                    <i class="fa-solid fa-receipt fs-2 mb-3"></i>
+                    <p>No invoices found.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

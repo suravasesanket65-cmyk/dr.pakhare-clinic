@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dental Clinic Login</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="{% static 'core/css/style.css' %}" rel="stylesheet">
+<style>
+/* inline styles omitted for brevity as they are replaced by style.css or standard styles */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#0d6efd,#6dd5fa,#ffffff);overflow:hidden;}
+.circle1{position:absolute;width:250px;height:250px;background:rgba(255,255,255,.25);border-radius:50%;top:-80px;left:-60px;}
+.circle2{position:absolute;width:300px;height:300px;background:rgba(255,255,255,.18);border-radius:50%;bottom:-120px;right:-80px;}
+.login-card{width:390px;padding:40px;background:rgba(255,255,255,.22);backdrop-filter:blur(18px);border-radius:25px;box-shadow:0 20px 45px rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.3);transition:.4s;}
+.login-card:hover{transform:translateY(-6px);}
+.logo{width:85px;height:85px;background:white;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:42px;margin:auto;box-shadow:0 10px 20px rgba(0,0,0,.15);}
+h2{text-align:center;margin-top:18px;font-weight:700;color:#0d47a1;}
+.subtitle{text-align:center;font-size:14px;color:#555;margin-bottom:30px;}
+.input-group{margin-bottom:18px;}
+.input-group-text{background:white;border:none;}
+.form-control{border:none;padding:12px;}
+.form-control:focus{box-shadow:0 0 10px rgba(13,110,253,.4);}
+.btn-login{width:100%;padding:12px;border:none;border-radius:12px;background:linear-gradient(90deg,#0d6efd,#4facfe);color:white;font-weight:600;transition:.3s;}
+.btn-login:hover{transform:scale(1.03);box-shadow:0 10px 20px rgba(13,110,253,.35);}
+.footer{margin-top:22px;text-align:center;font-size:13px;color:#444;}
+a{text-decoration:none;}
+</style>
+</head>
+
+<body>
+<div class="circle1"></div>
+<div class="circle2"></div>
+<div class="login-card">
+<div class="logo">🦷</div>
+<h2>DentalCare+</h2>
+<div class="subtitle">Clinic Management System</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form action="{% url 'login' %}" method="POST">
+{% csrf_token %}
+<div class="input-group">
+<span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+<input type="text" name="Username" class="form-control" placeholder="Username" required>
+</div>
+
+<div class="input-group">
+<span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+<input type="password" name="Password" required class="form-control" id="password" placeholder="Password">
+<button class="btn btn-light" type="button" onclick="togglePassword()"><i class="bi bi-eye-fill"></i></button>
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+<div><input type="checkbox"> Remember Me</div>
+<a href="#">Forgot Password?</a>
+</div>
+
+<button type="submit" class="btn-login">Login</button>
+</form>
+
+<div class="footer">
+© 2026 Dental Clinic Management System
+</div>
+</div>
+
+<script>
+function togglePassword(){
+let password=document.getElementById("password");
+if(password.type==="password"){password.type="text";}
+else{password.type="password";}
+}
+</script>
+</body>
+</html>

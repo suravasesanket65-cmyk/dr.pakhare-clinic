@@ -1,0 +1,581 @@
+{% extends 'core/dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Clinic Dashboard - Dr. Pakhare{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* KPI Cards */
+    .kpi-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .kpi-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 25px;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+    }
+
+    .kpi-card.blue::before {
+        background: #3498db;
+    }
+
+    .kpi-card.green::before {
+        background: #2ecc71;
+    }
+
+    .kpi-card.orange::before {
+        background: #f39c12;
+    }
+
+    .kpi-card.red::before {
+        background: #e74c3c;
+    }
+
+    .kpi-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px 0 rgba(31, 38, 135, 0.15);
+    }
+
+    .kpi-info h3 {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .kpi-info h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0;
+        color: var(--text-dark);
+    }
+
+    .kpi-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .kpi-card.blue .kpi-icon {
+        background: rgba(52, 152, 219, 0.1);
+        color: #3498db;
+    }
+
+    .kpi-card.green .kpi-icon {
+        background: rgba(46, 204, 113, 0.1);
+        color: #2ecc71;
+    }
+
+    .kpi-card.orange .kpi-icon {
+        background: rgba(243, 156, 18, 0.1);
+        color: #f39c12;
+    }
+
+    .kpi-card.red .kpi-icon {
+        background: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+    }
+
+    /* Content Cards */
+    .dashboard-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        margin-bottom: 40px;
+    }
+
+    .card-header-custom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .card-header-custom h2 {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Tables */
+    .table-custom {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+    .table-custom th {
+        font-weight: 600;
+        color: var(--text-muted);
+        padding: 10px 15px;
+        border: none;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .table-custom tbody tr {
+        background: rgba(255, 255, 255, 0.6);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s ease;
+    }
+
+    .table-custom tbody tr:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: scale(1.01);
+    }
+
+    .table-custom td {
+        padding: 18px 15px;
+        border: none;
+        vertical-align: middle;
+    }
+
+    .table-custom td:first-child {
+        border-top-left-radius: 12px;
+        border-bottom-left-radius: 12px;
+    }
+
+    .table-custom td:last-child {
+        border-top-right-radius: 12px;
+        border-bottom-right-radius: 12px;
+    }
+
+    .status-badge {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-scheduled {
+        background: #e1f5fe;
+        color: #0288d1;
+    }
+
+    .status-checked-in {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+
+    .status-in-consultation {
+        background: #f3e5f5;
+        color: #7b1fa2;
+    }
+
+    .status-treated {
+        background: #e8f5e9;
+        color: #388e3c;
+    }
+
+    .status-billed {
+        background: #e8eaf6;
+        color: #3f51b5;
+    }
+
+    .status-paid {
+        background: #e0f2f1;
+        color: #00796b;
+    }
+
+    /* Action Buttons */
+    .btn-action {
+        width: 35px;
+        height: 35px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        margin-right: 5px;
+    }
+
+    .btn-action.consult {
+        background: rgba(155, 89, 182, 0.1);
+        color: #9b59b6;
+    }
+
+    .btn-action.consult:hover {
+        background: #9b59b6;
+        color: white;
+    }
+
+    .btn-action.treat {
+        background: rgba(46, 204, 113, 0.1);
+        color: #2ecc71;
+    }
+
+    .btn-action.treat:hover {
+        background: #2ecc71;
+        color: white;
+    }
+
+    .btn-action.rx {
+        background: rgba(52, 152, 219, 0.1);
+        color: #3498db;
+    }
+
+    .btn-action.rx:hover {
+        background: #3498db;
+        color: white;
+    }
+
+    .btn-action.bill {
+        background: rgba(243, 156, 18, 0.1);
+        color: #f39c12;
+    }
+
+    .btn-action.bill:hover {
+        background: #f39c12;
+        color: white;
+    }
+
+    .btn-action.checkin {
+        background: rgba(230, 126, 34, 0.1);
+        color: #e67e22;
+    }
+
+    .btn-action.checkin:hover {
+        background: #e67e22;
+        color: white;
+    }
+
+    /* Primary Buttons */
+    .btn-add-patient {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-add-patient:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 180, 219, 0.3);
+        color: white;
+    }
+
+    /* Quick Filter Pills */
+    .filter-pills {
+        display: flex;
+        gap: 10px;
+    }
+
+    .filter-pill {
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-muted);
+        background: rgba(0, 0, 0, 0.05);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .filter-pill.active,
+    .filter-pill:hover {
+        background: var(--secondary);
+        color: white;
+    }
+
+    /* Search Input */
+    .search-box {
+        position: relative;
+        width: 300px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 10px 15px 10px 40px;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.8);
+        font-family: inherit;
+        outline: none;
+    }
+
+    .search-box i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- KPI Cards -->
+<div class="kpi-container">
+    <div class="kpi-card blue">
+        <div class="kpi-info">
+            <h3>Today's Appts</h3>
+            <h2>{{ today_appts_count }}</h2>
+        </div>
+        <div class="kpi-icon">
+            <i class="fa-solid fa-calendar-day"></i>
+        </div>
+    </div>
+
+    <div class="kpi-card green">
+        <div class="kpi-info">
+            <h3>Total Patients</h3>
+            <h2>{{ total_patients }}</h2>
+        </div>
+        <div class="kpi-icon">
+            <i class="fa-solid fa-user-injured"></i>
+        </div>
+    </div>
+
+    <div class="kpi-card orange">
+        <div class="kpi-info">
+            <h3>Pending Bills</h3>
+            <h2>{{ pending_bills_count }}</h2>
+        </div>
+        <div class="kpi-icon">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+        </div>
+    </div>
+
+    <div class="kpi-card red">
+        <div class="kpi-info">
+            <h3>Today's Revenue</h3>
+            <h2>₹{{ today_revenue|default:"0" }}</h2>
+        </div>
+        <div class="kpi-icon">
+            <i class="fa-solid fa-indian-rupee-sign"></i>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION 1: Today's Check-In Queue -->
+<div class="dashboard-card" style="border-left: 5px solid #e67e22;">
+    <div class="card-header-custom">
+        <h2><i class="fa-solid fa-user-clock text-warning"></i> Today's Check-In Queue</h2>
+        <span class="badge bg-warning text-dark rounded-pill">{{ checked_in_appts|length }} Waiting</span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Patient Name</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in checked_in_appts %}
+                <tr>
+                    <td class="fw-bold">{{ appt.AppointmentTime|time:"h:i A" }}</td>
+                    <td>
+                        <div class="fw-bold">{{ appt.PatientID.FirstName }} {{ appt.PatientID.LastName }}</div>
+                        <div class="text-muted small">ID: #{{ appt.PatientID.PatientID }}</div>
+                    </td>
+                    <td>{{ appt.PatientID.Mobile }}</td>
+                    <td>
+                        <span class="status-badge status-{{ appt.Status|lower }}">{{ appt.Status }}</span>
+                    </td>
+                    <td>
+                        <a href="{% url 'consultation' appt.AppointmentID %}" class="btn-action consult"
+                            title="Start / View Consultation">
+                            <i class="fa-solid fa-stethoscope"></i>
+                        </a>
+                        <a href="{% url 'treatment' appt.AppointmentID %}" class="btn-action treat"
+                            title="Log Treatment">
+                            <i class="fa-solid fa-tooth"></i>
+                        </a>
+                        <button type="button" class="btn-action rx" title="Write Prescription" data-bs-toggle="modal"
+                            data-bs-target="#prescriptionModal" data-appt-id="{{ appt.AppointmentID }}">
+                            <i class="fa-solid fa-prescription-bottle-medical"></i>
+                        </button>
+                        <button type="button" class="btn-action bill" title="Generate Bill" data-bs-toggle="modal"
+                            data-bs-target="#billingModal" data-appt-id="{{ appt.AppointmentID }}">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </button>
+                        {% if appt.Status == 'Billed' %}
+                        <a href="{% url 'payment' appt.AppointmentID %}" class="btn-action" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71;"
+                            title="Collect Payment">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">No patients are currently checked-in and
+                        waiting.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SECTION 2: Master Appointment List -->
+<div class="dashboard-card">
+    <div class="card-header-custom">
+        <h2><i class="fa-solid fa-calendar-check text-primary"></i> Master Appointment Queue</h2>
+        <div class="d-flex align-items-center gap-3">
+            <div class="filter-pills">
+                <a href="?filter=today"
+                    class="filter-pill {% if request.GET.filter == 'today' or not request.GET.filter %}active{% endif %}">Today</a>
+                <a href="?filter=tomorrow"
+                    class="filter-pill {% if request.GET.filter == 'tomorrow' %}active{% endif %}">Tomorrow</a>
+                <a href="?filter=upcoming"
+                    class="filter-pill {% if request.GET.filter == 'upcoming' %}active{% endif %}">Upcoming</a>
+                <a href="?filter=all"
+                    class="filter-pill {% if request.GET.filter == 'all' %}active{% endif %}">All</a>
+            </div>
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="patientSearchInput" placeholder="Search patients...">
+            </div>
+            <button type="button" class="btn-add-patient" data-bs-toggle="modal" data-bs-target="#addPatientModal">
+                <i class="fa-solid fa-plus"></i> Add Patient
+            </button>
+            <a href="{% url 'book_appointment' %}" class="btn-add-patient"
+                style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                <i class="fa-solid fa-calendar-plus"></i> Book Appt
+            </a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table-custom" id="appointmentsTable">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Patient Name</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in appointments %}
+                <tr>
+                    <td class="fw-bold">{{ appt.AppointmentTime|time:"h:i A" }}</td>
+                    <td>
+                        <div class="fw-bold">{{ appt.PatientID.FirstName }} {{ appt.PatientID.LastName }}</div>
+                        <div class="text-muted small">ID: #{{ appt.PatientID.PatientID }}</div>
+                    </td>
+                    <td>{{ appt.PatientID.Mobile }}</td>
+                    <td>
+                        <span class="status-badge status-{{ appt.Status|lower }}">{{ appt.Status }}</span>
+                    </td>
+                    <td>
+                        {% if appt.Status == 'Scheduled' %}
+                        <a href="{% url 'check_in_patient' appt.AppointmentID %}" class="btn-action checkin"
+                            title="Check-In Patient">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'consultation' appt.AppointmentID %}" class="btn-action consult"
+                            title="Consultation">
+                            <i class="fa-solid fa-stethoscope"></i>
+                        </a>
+                        <a href="{% url 'treatment' appt.AppointmentID %}" class="btn-action treat"
+                            title="Log Treatment">
+                            <i class="fa-solid fa-tooth"></i>
+                        </a>
+                        <button type="button" class="btn-action rx" title="Write Prescription" data-bs-toggle="modal"
+                            data-bs-target="#prescriptionModal" data-appt-id="{{ appt.AppointmentID }}">
+                            <i class="fa-solid fa-prescription-bottle-medical"></i>
+                        </button>
+                        <button type="button" class="btn-action bill" title="Generate Bill" data-bs-toggle="modal"
+                            data-bs-target="#billingModal" data-appt-id="{{ appt.AppointmentID }}">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </button>
+                        {% if appt.Status == 'Billed' %}
+                        <a href="{% url 'payment' appt.AppointmentID %}" class="btn-action" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71;"
+                            title="Collect Payment">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">No appointments found for this filter.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SECTION 3: Treatment Statistics -->
+<div class="dashboard-card">
+    <div class="card-header-custom">
+        <h2><i class="fa-solid fa-chart-pie text-info"></i> Treatment Statistics</h2>
+    </div>
+    <div class="row g-4">
+        {% for stat in treatment_stats %}
+        <div class="col-md-6 col-lg-4">
+            <div class="p-3 rounded-4"
+                style="background: rgba(255,255,255,0.5); border: 1px solid rgba(0,0,0,0.05);">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-bold">{{ stat.name }}</span>
+                    <span class="badge bg-primary rounded-pill">{{ stat.count }} procedure{{ stat.count|pluralize }}</span>
+                </div>
+                <div class="progress" style="height: 8px; border-radius: 6px;">
+                    <div class="progress-bar bg-info" role="progressbar" data-width="{{ stat.percentage }}"
+                        aria-valuenow="{{ stat.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted py-3">No treatment statistics recorded yet.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'core/dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Reports Center — Dr. Pakhare Dental Clinic{% endblock %}
+
+{% block extra_css %}
+<style>
+    .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 15px 35px rgba(11, 122, 117, 0.1);
+        padding: 40px;
+    }
+
+    .form-control,
+    .form-select {
+        border: 1.5px solid #e2e8f0;
+        padding: 14px 18px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        transition: all 0.25s ease;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #0b7a75;
+        box-shadow: 0 0 0 4px rgba(11, 122, 117, 0.12);
+    }
+
+    .btn-generate {
+        background: #0b7a75;
+        color: white;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.25s ease;
+        width: 100%;
+    }
+
+    .btn-generate:hover {
+        background: #085e5a;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(11, 122, 117, 0.25);
+        color: white;
+    }
+
+    .report-badge {
+        display: inline-block;
+        background: #e6f7f6;
+        color: #0b7a75;
+        font-weight: 600;
+        font-size: 0.8rem;
+        padding: 6px 14px;
+        border-radius: 50px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+        <div class="glass-card">
+            <div class="text-center mb-4">
+                <span class="report-badge"><i class="fa-solid fa-chart-line me-1"></i> Analytics & Exports</span>
+                <h2 class="fw-bold mb-2">Enterprise Reports Center</h2>
+                <p class="text-muted">Export clean, audit-ready CSV reports across clinical and financial modules.</p>
+            </div>
+
+            <form action="{% url 'generate_csv_report' %}" method="POST">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Select Report Type <span class="text-danger">*</span></label>
+                    <select class="form-select" name="report_type" required>
+                        <option value="">Choose report category...</option>
+                        <option value="Income Report">Income & Revenue Report (Payments)</option>
+                        <option value="Patient Report">Patient Master Directory Report</option>
+                        <option value="Appointment Report">Appointment Schedule & Status Report</option>
+                        <option value="Pending Fees">Pending Fees & Outstanding Invoices</option>
+                        <option value="Doctor Report">Doctor Activity Report</option>
+                        <option value="Treatment Report">Treatment Procedure & Cost Report</option>
+                    </select>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <label class="form-label fw-bold">Start Date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="start_date" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">End Date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="end_date" required>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-2">
+                    <button type="submit" class="btn-generate">
+                        <i class="fa-solid fa-file-csv me-2"></i> Generate & Download CSV Report
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

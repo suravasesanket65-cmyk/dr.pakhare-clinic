@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription - {{ patient.FirstName }} {{ patient.LastName }}</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .pad-container {
+            background: white;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 10px solid #0b7a75;
+            position: relative;
+        }
+        .clinic-header {
+            text-align: center;
+            border-bottom: 2px solid #0b7a75;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .clinic-header h1 {
+            color: #0b7a75;
+            margin: 0 0 5px 0;
+            font-size: 28px;
+        }
+        .clinic-header p {
+            margin: 2px 0;
+            color: #555;
+            font-size: 14px;
+        }
+        .patient-details {
+            display: flex;
+            justify-content: space-between;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .patient-details div {
+            flex: 1;
+        }
+        .patient-details strong {
+            color: #0b7a75;
+        }
+        .rx-symbol {
+            font-size: 40px;
+            font-weight: bold;
+            color: #0b7a75;
+            margin-bottom: 20px;
+            font-family: serif;
+        }
+        .med-list {
+            margin-bottom: 40px;
+            min-height: 300px; /* Gives realistic space */
+        }
+        .med-item {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .med-item::before {
+            content: "•";
+            color: #0b7a75;
+            position: absolute;
+            left: 0;
+            font-size: 20px;
+        }
+        .med-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .med-instructions {
+            font-size: 14px;
+            color: #555;
+            margin-top: 5px;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        .follow-up {
+            font-size: 15px;
+            font-weight: 600;
+            color: #e74c3c;
+        }
+        .signature {
+            text-align: center;
+        }
+        .signature-line {
+            border-bottom: 1px solid #333;
+            width: 200px;
+            margin-bottom: 5px;
+        }
+        .no-print {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .btn-print {
+            background: #0b7a75;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        @media print {
+            body { background: white; padding: 0; }
+            .pad-container { box-shadow: none; max-width: 100%; border-top: none; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print">
+        <button class="btn-print" onclick="window.print()">Print / Save PDF</button>
+    </div>
+
+    <div class="pad-container">
+        <!-- Clinic Letterhead -->
+        <div class="clinic-header">
+            <h1>{{ clinic.ClinicName|default:"Dr. Pakhare Dental Clinic" }}</h1>
+            <p>{{ clinic.Address|default:"123 Dental Street, Healthcare City, MH 400001" }}</p>
+            <p>Phone: {{ clinic.Phone|default:"+91 98765 43210" }} | GSTIN: {{ clinic.GSTNumber|default:"27AADCD1234F1Z9" }}</p>
+        </div>
+
+        <!-- Patient Info -->
+        <div class="patient-details">
+            <div>
+                <p><strong>Patient Name:</strong> {{ patient.FirstName }} {{ patient.LastName }}</p>
+                <p><strong>Age/Gender:</strong> {{ patient.DOB|date:"Y" }} ({{ patient.Gender }})</p>
+            </div>
+            <div style="text-align: right;">
+                <p><strong>Date:</strong> {{ today|date:"d M Y" }}</p>
+                <p><strong>Visit ID:</strong> #{{ visit.VisitID }}</p>
+            </div>
+        </div>
+
+        <!-- Clinical Context -->
+        {% if visit.Diagnosis %}
+        <div style="margin-bottom: 20px; font-size: 14px; color: #555;">
+            <strong>Diagnosis:</strong> {{ visit.Diagnosis }}
+        </div>
+        {% endif %}
+
+        <!-- Rx Symbol -->
+        <div class="rx-symbol">Rx</div>
+
+        <!-- Medicines -->
+        <div class="med-list">
+            {% for rx in prescriptions %}
+            <div class="med-item">
+                <div class="med-name">{{ rx.MedicineName }}</div>
+                <div class="med-instructions">
+                    {{ rx.Dosage }} | {{ rx.Frequency }} for {{ rx.Days }} Days
+                    {% if rx.Instructions %}<br><em>Note: {{ rx.Instructions }}</em>{% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p style="color: #999; font-style: italic;">No medicines prescribed.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="follow-up">
+                {% if visit.NextVisitDate %}
+                Next Follow-up Date:<br>
+                <span style="font-size: 18px;">{{ visit.NextVisitDate|date:"d M Y" }}</span>
+                {% else %}
+                Follow-up: As needed
+                {% endif %}
+            </div>
+            
+            <div class="signature">
+                <div class="signature-line"></div>
+                <strong>Dr. Pakhare</strong><br>
+                <span style="font-size: 13px; color: #777;">Chief Dental Surgeon</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Automatically trigger print dialog when page loads
+        window.onload = function() {
+            setTimeout(function() {
+                window.print();
+            }, 500);
+        };
+    </script>
+</body>
+</html>

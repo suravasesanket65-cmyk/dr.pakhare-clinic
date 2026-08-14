@@ -1,0 +1,140 @@
+{% extends 'core/dashboard_base.html' %}
+{% block title %}Master Schedule | Clinic CMS{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h3 text-gray-800"><i class="fa-solid fa-calendar-days text-primary me-2"></i>Global Master Schedule</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <label for="scheduleDate" class="form-label fw-bold">Select Date</label>
+                    <input type="date" id="scheduleDate" class="form-control form-control-lg">
+                    
+                    <div class="mt-4 pt-4 border-top">
+                        <h6 class="fw-bold mb-3">Legend</h6>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge bg-success me-2 p-2" style="width: 25px;">&nbsp;</span> Available
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-secondary me-2 p-2" style="width: 25px;">&nbsp;</span> Booked
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 col-lg-9">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div id="slotsGrid" class="row g-3">
+                        <div class="col-12 text-center text-muted py-5">
+                            <div class="spinner-border text-primary mb-3" role="status"></div>
+                            <p>Loading schedule...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .time-slot {
+        transition: all 0.2s ease;
+        border: 2px solid #e3e6f0;
+        cursor: pointer;
+    }
+    .time-slot.available:hover {
+        border-color: #1cc88a;
+        background-color: #f8fffb;
+        transform: translateY(-2px);
+    }
+    .time-slot.booked {
+        background-color: #eaecf4;
+        border-color: #eaecf4;
+        color: #858796;
+        cursor: not-allowed;
+    }
+</style>
+
+<script>
+(function() {
+    const dateInput = document.getElementById('scheduleDate');
+    const slotsGrid = document.getElementById('slotsGrid');
+
+    if (!dateInput || !slotsGrid) return; // Guard clause
+
+    function formatDateToAPI(dateObj) {
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    const todayObj = new Date();
+    dateInput.value = formatDateToAPI(todayObj); 
+    fetchSlots(formatDateToAPI(todayObj));
+
+    dateInput.addEventListener('change', function(e) {
+        if (!e.target.value) return; 
+        const selectedDate = new Date(e.target.value + 'T00:00:00');
+        fetchSlots(formatDateToAPI(selectedDate));
+    });
+
+    function fetchSlots(dateStr) {
+        slotsGrid.innerHTML = '<div class="col-12 text-center text-muted py-5"><div class="spinner-border text-primary mb-3" role="status"></div><p>Loading schedule...</p></div>';
+        
+        fetch(`/api/get-slots/?date=${dateStr}`)
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if(data.error) {
+                    slotsGrid.innerHTML = `<div class="col-12 text-danger text-center py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>${data.error}</div>`;
+                    return;
+                }
+                slotsGrid.innerHTML = '';
+                if(data.slots.length === 0) {
+                    slotsGrid.innerHTML = '<div class="col-12 text-muted text-center py-4">No slots available for this date.</div>';
+                    return;
+                }
+
+                data.slots.forEach(slot => {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-6 col-lg-4 col-xl-3';
+                    
+                    if (slot.is_booked) {
+                        const doctorBadge = slot.doctor_name ? `<span class="badge bg-primary mb-2"><i class="fa-solid fa-user-doctor me-1"></i> ${slot.doctor_name}</span>` : '';
+                        col.innerHTML = `
+                            <div class="card time-slot booked h-100 p-3 text-center">
+                                <h5 class="mb-1">${slot.time}</h5>
+                                ${doctorBadge}
+                                <small class="fw-bold text-dark mt-auto d-block border-top pt-2" style="font-size: 0.8rem;">
+                                    <i class="fa-solid fa-user me-1"></i> ${slot.patient_info}
+                                </small>
+                            </div>
+                        `;
+                    } else {
+                        col.innerHTML = `
+                            <div class="card time-slot available h-100 p-3 text-center">
+                                <h5 class="mb-0 text-success">${slot.time}</h5>
+                                <small class="text-success mt-1">Available</small>
+                            </div>
+                        `;
+                    }
+                    slotsGrid.appendChild(col);
+                });
+            })
+            .catch(error => {
+                console.error("Error Fetching Slots:", error);
+                slotsGrid.innerHTML = `<div class="col-12 text-danger text-center py-4">Failed to load schedule. <br> Error: ${error.message}</div>`;
+            });
+    }
+})();
+</script>
+{% endblock %}

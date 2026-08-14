@@ -1,0 +1,135 @@
+{% extends 'core/dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Enterprise Audit Trail — Dr. Pakhare Dental Clinic{% endblock %}
+
+{% block extra_css %}
+<style>
+    .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 15px 35px rgba(11, 122, 117, 0.1);
+        padding: 40px;
+    }
+
+    .table-custom {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+    .table-custom th {
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1px;
+        padding: 10px 15px;
+        border: none;
+    }
+
+    .table-custom tbody tr {
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 12px;
+        transition: all 0.25s ease;
+    }
+
+    .table-custom tbody tr:hover {
+        background: white;
+        box-shadow: 0 4px 15px rgba(11, 122, 117, 0.08);
+        transform: translateY(-2px);
+    }
+
+    .table-custom td {
+        padding: 16px 15px;
+        vertical-align: middle;
+        border: none;
+        font-size: 0.95rem;
+    }
+
+    .table-custom td:first-child {
+        border-top-left-radius: 12px;
+        border-bottom-left-radius: 12px;
+    }
+
+    .table-custom td:last-child {
+        border-top-right-radius: 12px;
+        border-bottom-right-radius: 12px;
+    }
+
+    .role-badge {
+        font-weight: 600;
+        font-size: 0.75rem;
+        padding: 5px 12px;
+        border-radius: 50px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="glass-card">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1 mb-2">
+                <i class="fa-solid fa-shield-halved me-1"></i> Security & Governance
+            </span>
+            <h2 class="fw-bold mb-1">System Audit Trail</h2>
+            <p class="text-muted mb-0">Complete chronological log of administrative, clinical, and financial actions.</p>
+        </div>
+        <div>
+            <span class="badge bg-light text-dark border px-3 py-2">
+                <i class="fa-solid fa-list-check me-1"></i> Total Entries: {{ logs|length }}
+            </span>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>Log ID</th>
+                    <th>Timestamp</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Action Executed</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td class="fw-bold text-secondary">#{{ log.LogID }}</td>
+                    <td class="text-muted small">
+                        <i class="fa-regular fa-clock me-1"></i>{{ log.Timestamp|date:"d M Y, h:i A" }}
+                    </td>
+                    <td class="fw-bold text-dark">{{ log.Username }}</td>
+                    <td>
+                        {% if log.Role == 'Admin' %}
+                        <span class="role-badge bg-danger text-white">Admin</span>
+                        {% elif log.Role == 'Doctor' %}
+                        <span class="role-badge bg-primary text-white">Doctor</span>
+                        {% elif log.Role == 'Receptionist' %}
+                        <span class="role-badge bg-warning text-dark">Receptionist</span>
+                        {% else %}
+                        <span class="role-badge bg-secondary text-white">{{ log.Role }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="fw-medium">{{ log.Action }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-5">
+                        <i class="fa-solid fa-clipboard-list fa-2x mb-2 d-block opacity-50"></i>
+                        No audit log entries recorded yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

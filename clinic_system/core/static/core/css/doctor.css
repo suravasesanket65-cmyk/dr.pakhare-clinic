@@ -1,0 +1,106 @@
+:root {
+  --clinic-blue: #0b6eae;
+  --clinic-navy: #123657;
+  --clinic-pale: #eaf6fc;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eef8fc 0%, #f8fbfd 55%, #e4f2f9 100%);
+  color: #213547;
+  font-family: Arial, sans-serif;
+}
+
+.page-shell { max-width: 880px; }
+
+.clinic-header { color: var(--clinic-navy); }
+
+.clinic-mark {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--clinic-blue);
+  box-shadow: 0 8px 18px rgb(11 110 174 / 22%);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.eyebrow {
+  color: var(--clinic-blue);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.form-card, .prescription-pad {
+  border: 1px solid #d6e7f0;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 14px 34px rgb(28 80 112 / 10%);
+  padding: clamp(1.25rem, 4vw, 2.25rem);
+}
+
+.prescription-pad {
+  border-top: 6px solid var(--clinic-blue);
+  background-image: linear-gradient(#fff 31px, #dcecf5 32px);
+  background-size: 100% 32px;
+}
+
+.pad-top { background: #fff; padding-bottom: 1rem; }
+.date-line { color: #64748b; font-size: .85rem; }
+.date-line strong { display: block; color: var(--clinic-navy); font-weight: 500; }
+
+.form-label { color: var(--clinic-navy); font-size: .9rem; font-weight: 600; }
+.form-control, .form-select, .input-group-text { border-color: #c9dce7; }
+.form-control:focus, .form-select:focus { border-color: #65add5; box-shadow: 0 0 0 .25rem rgb(11 110 174 / 14%); }
+.input-group-text { background: var(--clinic-pale); color: var(--clinic-blue); }
+.btn-primary { border-color: var(--clinic-blue); background: var(--clinic-blue); }
+.btn-primary:hover, .btn-primary:focus { border-color: #085889; background: #085889; }
+.btn-outline-primary { border-color: var(--clinic-blue); color: var(--clinic-blue); }
+.btn-outline-primary:hover { background: var(--clinic-blue); }
+.rx-rule { border-top: 1px dashed #a9c8d9; }
+
+/* Dashboard */
+.dashboard-shell { max-width: 1020px; }
+.dashboard-nav { min-height: 52px; }
+.brand-title { color: var(--clinic-navy); font-size: .94rem; font-weight: 600; }
+.staff-badge { border: 1px solid #d6e7f0; border-radius: 999px; background: #fff; color: #557187; font-size: .82rem; font-weight: 600; padding: .55rem .8rem; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: #38a169; box-shadow: 0 0 0 3px #dff6e8; }
+.welcome-card { overflow: hidden; position: relative; border-radius: 22px; background: var(--clinic-navy); box-shadow: 0 16px 36px rgb(18 54 87 / 19%); color: #fff; padding: clamp(1.75rem, 5vw, 3rem); }
+.welcome-card::after { content: ""; position: absolute; right: -80px; bottom: -120px; width: 330px; height: 330px; border: 52px solid rgb(114 196 233 / 14%); border-radius: 50%; }
+.welcome-card h1 { max-width: 620px; font-size: clamp(1.85rem, 4vw, 2.85rem); font-weight: 700; letter-spacing: -.035em; line-height: 1.12; }
+.welcome-card .eyebrow { color: #8ed4f3; }
+.welcome-copy { max-width: 580px; color: #c8e4f2; font-size: 1.05rem; line-height: 1.65; }
+.today-panel { position: relative; z-index: 1; border: 1px solid rgb(183 232 250 / 26%); border-radius: 16px; background: rgb(255 255 255 / 9%); padding: 1.25rem 1.35rem; }
+.today-panel span, .today-panel strong { display: block; }
+.today-label { color: #a9dced; font-size: .72rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+.today-panel strong { margin: .32rem 0 .7rem; font-size: 1.3rem; }
+.today-date { color: #d9eff8; font-size: .9rem; }
+.action-card { display: flex; align-items: center; gap: 1.1rem; border: 1px solid #d6e7f0; border-radius: 18px; background: #fff; box-shadow: 0 10px 25px rgb(28 80 112 / 7%); color: inherit; padding: 1.45rem; text-decoration: none; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.action-card:hover { border-color: #a6d2e8; box-shadow: 0 15px 30px rgb(28 80 112 / 13%); color: inherit; transform: translateY(-3px); }
+.action-card:focus-visible { outline: 3px solid rgb(11 110 174 / 28%); outline-offset: 3px; }
+.action-icon { display: grid; flex: 0 0 auto; width: 51px; height: 51px; place-items: center; border-radius: 14px; }
+.action-icon svg { width: 26px; height: 26px; }
+.treatment-action .action-icon { background: #e8f6fc; color: var(--clinic-blue); }
+.prescription-action .action-icon { background: #eef1fb; color: #5664ad; }
+.action-content { min-width: 0; flex: 1; }
+.action-title, .action-copy { display: block; }
+.action-title { color: var(--clinic-navy); font-size: 1.08rem; font-weight: 700; }
+.action-copy { margin-top: .28rem; color: #64748b; font-size: .9rem; line-height: 1.5; }
+.action-arrow { color: var(--clinic-blue); font-size: 1.5rem; transition: transform .2s ease; }
+.action-card:hover .action-arrow { transform: translateX(4px); }
+.care-note { display: flex; align-items: flex-start; gap: .8rem; border: 1px solid #cfe8f3; border-radius: 14px; background: #f1faff; color: #557187; padding: 1rem 1.15rem; }
+.care-note p { margin: 0; font-size: .9rem; line-height: 1.5; }
+.care-note strong { color: var(--clinic-navy); }
+.care-note-icon { display: grid; width: 25px; height: 25px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: #d9f2fb; color: var(--clinic-blue); }
+
+@media (max-width: 575.98px) {
+  .clinic-mark { width: 46px; height: 46px; border-radius: 12px; }
+  .form-card, .prescription-pad { border-radius: 14px; }
+  .welcome-card { border-radius: 18px; }
+  .action-card { align-items: flex-start; padding: 1.2rem; }
+}

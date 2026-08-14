@@ -1,0 +1,1317 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. Pakhare Dental Clinic</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+    rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'core/css/style.css' %}" />
+  <style>
+    /* ── From header_footer.html ── */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #0b7a75;
+      --primary-dark: #085e5a;
+      --primary-light: #e6f7f6;
+      --accent: #f5a623;
+      --accent-hover: #e0950f;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+      --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+      /* from hero_slider */
+      --ink: #173b3a;
+      --muted: #59716f;
+      --paper: #f8f5ef;
+      --mint: #d9eee7;
+      --coral: #ec775f;
+      /* from about_services */
+      --navy: #153b50;
+      --teal: #159a9c;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header CSS */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition);
+    }
+
+    .header.scrolled {
+      box-shadow: var(--shadow-md);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--gray-900);
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), #0da39c);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .navbar-logo {
+      height: 90px;
+      width: auto;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--gray-600);
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      transition: all var(--transition);
+      position: relative;
+    }
+
+    .nav a::after {
+      content: "";
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      width: calc(100% - 36px);
+      height: 2px;
+      background: var(--primary);
+      border-radius: 2px;
+      transition: transform var(--transition);
+    }
+
+    .nav a:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav a:hover::after {
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    .nav .btn-login {
+      background: var(--primary);
+      color: var(--white) !important;
+      padding: 8px 22px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(11, 122, 117, 0.3);
+      margin-left: 8px;
+    }
+
+    .nav .btn-login::after {
+      display: none;
+    }
+
+    .nav .btn-login:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 4px 16px rgba(11, 122, 117, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      width: 24px;
+      height: 2px;
+      background: var(--gray-800);
+      border-radius: 2px;
+      transition: all var(--transition);
+    }
+
+    /* Footer CSS */
+    .footer {
+      margin-top: auto;
+      background: var(--gray-900);
+      color: rgba(255, 255, 255, 0.8);
+      padding: 56px 24px 32px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    .footer-brand h3 {
+      color: var(--white);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-brand p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 300px;
+    }
+
+    .footer-col h4 {
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 18px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col ul li {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.55);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: color var(--transition);
+    }
+
+    .footer-col ul li:hover {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .footer-col ul li .emoji-icon {
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+
+    .footer-col ul li a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .footer-col ul li a:hover {
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-bottom-links a {
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    .footer-bottom-links a:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Hero Slider CSS */
+    .hero-slider {
+      position: relative;
+      min-height: 680px;
+      overflow: hidden;
+      color: var(--white);
+      isolation: isolate;
+    }
+
+    .slides {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.04);
+      background-position: center;
+      background-size: cover;
+      transition: opacity 1s ease, transform 6s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(9, 35, 39, .84) 0%, rgba(9, 35, 39, .59) 47%, rgba(9, 35, 39, .16) 100%);
+    }
+
+    .slide:nth-child(1) {
+      background-image: url("https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1800&q=85");
+    }
+
+    .slide:nth-child(2) {
+      background-image: url("https://images.unsplash.com/photo-1629909615184-74f495363b67?auto=format&fit=crop&w=1800&q=85");
+    }
+
+    .slide:nth-child(3) {
+      background-image: url("https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=1800&q=85");
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+    }
+
+    /* Infinite Marquee Ticker CSS */
+    .ticker-wrap {
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+      padding: 15px 0;
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 20px;
+      width: max-content;
+      animation: ticker 40s linear infinite;
+    }
+
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes ticker {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .ticker-track img {
+      height: 250px;
+      width: 350px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(11, 122, 117, 0.15);
+      flex-shrink: 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .ticker-track img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 30px rgba(11, 122, 117, 0.25);
+    }
+
+    .hero-content {
+      width: min(1120px, calc(100% - 60px));
+      margin: auto;
+      padding: 150px 0 100px;
+    }
+
+    .eyebrow {
+      margin: 0 0 17px;
+      color: #f6a693;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .hero-slider h1 {
+      max-width: 700px;
+      margin: 0 0 22px;
+      font-size: clamp(2.8rem, 6vw, 5.6rem);
+      letter-spacing: -.04em;
+      color: var(--white);
+      line-height: 1.1;
+      font-family: Georgia, serif;
+    }
+
+    .hero-copy {
+      max-width: 530px;
+      margin: 0 0 34px;
+      color: #e9f3ef;
+      font-size: 1.15rem;
+      line-height: 1.7;
+    }
+
+    .button-coral {
+      display: inline-block;
+      padding: 14px 23px;
+      border-radius: 999px;
+      background: var(--coral);
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 9px 20px rgba(0, 0, 0, .16);
+      transition: transform .2s, background .2s;
+    }
+
+    .button-coral:hover {
+      background: #d8644e;
+      transform: translateY(-3px);
+    }
+
+    .slider-nav {
+      position: absolute;
+      right: max(30px, calc((100% - 1120px)/2));
+      bottom: 35px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, .9);
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .dot.active {
+      width: 31px;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    /* About & Services CSS */
+    .page-section {
+      padding: 78px 6vw;
+      background: #fbfdfd;
+    }
+
+    .about {
+      display: grid;
+      grid-template-columns: minmax(230px, 390px) 1fr;
+      align-items: center;
+      gap: clamp(35px, 7vw, 105px);
+      max-width: 1120px;
+      margin: auto;
+    }
+
+    .doctor-slider {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      width: 100%;
+      height: 100%;
+      min-height: 400px;
+      aspect-ratio: 4 / 4.5;
+      box-shadow: 18px 18px 0 #ccece7;
+    }
+
+    .doctor-slider img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    .doctor-slider img.active {
+      opacity: 1;
+    }
+
+    .degree {
+      display: inline-block;
+      margin: 18px 0 17px;
+      padding: 7px 13px;
+      border-radius: 100px;
+      background: var(--mint);
+      color: #087b7c;
+      font-size: .86rem;
+      font-weight: 700;
+    }
+
+    .intro {
+      max-width: 570px;
+    }
+
+    .intro p:not(.eyebrow) {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 1.28rem;
+      line-height: 1.75;
+    }
+
+    .intro h1 {
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.1;
+      margin: 0;
+      color: var(--navy);
+    }
+
+    .services-wrap {
+      background: var(--mint);
+    }
+
+    .services {
+      max-width: 1120px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .services>h2 {
+      margin-bottom: 38px;
+      font-size: clamp(1.8rem, 3vw, 2.45rem);
+      margin: 0 0 38px;
+      color: var(--navy);
+    }
+
+    .services .eyebrow {
+      color: var(--teal);
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 19px;
+    }
+
+    .service-card {
+      min-height: 215px;
+      padding: 28px 15px;
+      border: 1px solid #d7eeea;
+      border-radius: 16px;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 7px 18px rgba(18, 76, 84, .06);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(18, 76, 84, .13);
+    }
+
+    .icon {
+      width: 55px;
+      height: 55px;
+      padding: 13px;
+      border-radius: 14px;
+      background: #dff5f1;
+      color: var(--teal);
+    }
+
+    .icon svg {
+      width: 100%;
+      height: 100%;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .service-card h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.08rem;
+    }
+
+    .service-card p {
+      margin: -7px 0 0;
+      max-width: 190px;
+      color: var(--muted);
+      font-size: .96rem;
+      line-height: 1.5;
+    }
+
+    /* Reviews CSS */
+    .reviews {
+      padding: 100px 30px;
+      background: var(--paper);
+    }
+
+    .reviews-inner {
+      width: min(1120px, 100%);
+      margin: auto;
+    }
+
+    .reviews-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 38px;
+    }
+
+    .reviews-heading h2 {
+      margin: 0;
+      font-size: clamp(2.1rem, 4vw, 3.3rem);
+      color: var(--ink);
+      font-family: Georgia, serif;
+    }
+
+    .reviews-heading p {
+      max-width: 370px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .review-card {
+      position: relative;
+      padding: 31px;
+      border: 1px solid #e1e5dc;
+      border-radius: 20px;
+      background: var(--white);
+      box-shadow: 0 12px 28px rgba(23, 59, 58, .08);
+      transition: transform .25s, box-shadow .25s;
+    }
+
+    .review-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 18px 35px rgba(23, 59, 58, .14);
+    }
+
+    .quote {
+      color: var(--coral);
+      font: 46px/1 Georgia, serif;
+    }
+
+    .review-card p {
+      min-height: 76px;
+      margin: 13px 0 25px;
+      color: var(--ink);
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+
+    .stars {
+      color: #e8a745;
+      letter-spacing: 3px;
+    }
+
+    .reviewer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 17px;
+      padding-top: 17px;
+      border-top: 1px solid #edf0ea;
+    }
+
+    .avatar {
+      display: grid;
+      width: 37px;
+      height: 37px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--mint);
+      color: var(--ink);
+      font-weight: bold;
+    }
+
+    .reviewer strong {
+      display: block;
+      font-size: .9rem;
+    }
+
+    .reviewer small {
+      color: var(--muted);
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        display: none;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        flex-direction: column;
+        padding: 16px 24px 24px;
+        box-shadow: var(--shadow-lg);
+        border-bottom: 1px solid var(--gray-200);
+        gap: 4px;
+      }
+
+      .nav.open {
+        display: flex;
+      }
+
+      .nav a {
+        width: 100%;
+        padding: 12px 16px;
+      }
+
+      .nav a::after {
+        display: none;
+      }
+
+      .nav .btn-login {
+        margin-left: 0;
+        text-align: center;
+        margin-top: 4px;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero-slider {
+        min-height: 620px;
+      }
+
+      .hero-content {
+        width: calc(100% - 42px);
+        padding-top: 120px;
+      }
+
+      .slider-nav {
+        right: 21px;
+      }
+
+      .reviews {
+        padding: 70px 21px;
+      }
+
+      .reviews-heading {
+        display: block;
+      }
+
+      .reviews-heading p {
+        margin-top: 17px;
+      }
+
+      .review-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page-section {
+        padding: 55px 7vw;
+      }
+
+      .about {
+        grid-template-columns: 1fr;
+      }
+
+      .doctor-photo {
+        max-width: 350px;
+      }
+
+      .service-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 390px) {
+      .service-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══ Header ═══ -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="{% url 'index' %}" class="logo navbar-brand">
+        <img src="{% static 'core/images/clinic_logo.png' %}" alt="Dr. Pakhare Dental Clinic Logo" class="navbar-logo">
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="nav">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#patientInterceptModal" class="btn-nav">Book Appointment</a>
+        <a href="{% url 'login' %}" class="btn-login">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ═══ Hero Slider ═══ -->
+  <section class="hero-slider" aria-label="Dental clinic highlights">
+    <div class="slides" aria-live="polite">
+      <div class="slide active" role="img" aria-label="Bright modern dental treatment room"></div>
+      <div class="slide" role="img" aria-label="Clean dental clinic interior"></div>
+      <div class="slide" role="img" aria-label="Comfortable dental consultation room"></div>
+      <div class="slide"><img src="{% static 'core/images/clinic_1.jpg' %}" alt="Clinic Interior 1" /></div>
+      <div class="slide"><img src="{% static 'core/images/clinic_2.jpg' %}" alt="Clinic Interior 2" /></div>
+    </div>
+    <div class="hero-content">
+      <p class="eyebrow">Dr. Pakhare Dental Clinic</p>
+      <h1>Advanced Dental Care in Pimpri-Chinchwad</h1>
+      <p class="hero-copy">Modern dentistry, thoughtful care, and confident smiles—all in a calm, welcoming space.</p>
+      <a class="button-coral" href="#" data-bs-toggle="modal" data-bs-target="#patientInterceptModal"
+        style="font-size: 1.1rem; padding: 16px 32px;"><i class="fa-solid fa-calendar-check me-2"></i>Book an
+        Appointment</a>
+    </div>
+    <div class="slider-nav" aria-label="Choose clinic image">
+      <button class="dot active" type="button" aria-label="Show slide 1"></button>
+      <button class="dot" type="button" aria-label="Show slide 2"></button>
+      <button class="dot" type="button" aria-label="Show slide 3"></button>
+      <button class="dot" type="button" aria-label="Show slide 4"></button>
+      <button class="dot" type="button" aria-label="Show slide 5"></button>
+    </div>
+  </section>
+
+  <!-- ═══ About Section ═══ -->
+  <section id="about" class="page-section">
+    <div class="about">
+      <div class="doctor-slider" aria-label="Dr. Pakhare photos">
+        {% if clinic_images %}
+        {% for img in clinic_images %}
+        <img class="{% if forloop.first %}active{% endif %}" src="{{ img.image.url }}" alt="Doctor Profile Photo" />
+        {% endfor %}
+        {% else %}
+        <img class="active" src="{% static 'core/images/dr_pakhare_1.png' %}" alt="Dr. Pakhare - Profile Photo 1" />
+        <img src="{% static 'core/images/dr_pakhare_2.png' %}" alt="Dr. Pakhare - Profile Photo 2" />
+        {% endif %}
+      </div>
+      <div class="intro">
+        <p class="eyebrow">Meet your dentist &bull; <strong>{{ clinic_profile.experience_years }}</strong></p>
+        <h1>About {{ clinic_profile.doctor_name }}</h1>
+        <span class="degree">BDS, MDS</span>
+        <p>{{ clinic_profile.bio }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Services Section ═══ -->
+  <section id="services" class="page-section services-wrap">
+    <div class="services">
+      <p class="eyebrow">Complete dental care</p>
+      <h2>Our Services</h2>
+      <div class="service-grid">
+        <article class="service-card">
+          <div class="icon"><svg viewBox="0 0 24 24">
+              <path
+                d="M8 3c-2.5 0-4 1.8-4 4.5C4 12 6.2 20 8.5 20c1.4 0 1.2-3 3.5-3s2.1 3 3.5 3C17.8 20 20 12 20 7.5 20 4.8 18.5 3 16 3c-1.7 0-2.8.8-4 1.8C10.8 3.8 9.7 3 8 3Z" />
+              <path d="M12 8v5M9.5 10.5h5" />
+            </svg></div>
+          <h3>Root Canal</h3>
+          <p>Pain-free treatment to save infected teeth.</p>
+        </article>
+        <article class="service-card">
+          <div class="icon"><svg viewBox="0 0 24 24">
+              <path
+                d="M8 3c-2.5 0-4 1.8-4 4.5C4 12 6.2 20 8.5 20c1.4 0 1.2-3 3.5-3s2.1 3 3.5 3C17.8 20 20 12 20 7.5 20 4.8 18.5 3 16 3c-1.7 0-2.8.8-4 1.8C10.8 3.8 9.7 3 8 3Z" />
+              <circle cx="12" cy="11" r="2.4" />
+            </svg></div>
+          <h3>Dental Implants</h3>
+          <p>Permanent replacement for missing teeth.</p>
+        </article>
+        <article class="service-card">
+          <div class="icon"><svg viewBox="0 0 24 24">
+              <path d="M4 7h16M4 17h16" />
+              <path d="M6 7v10M12 7v10M18 7v10" />
+              <rect x="4" y="5" width="4" height="4" rx="1" />
+              <rect x="10" y="15" width="4" height="4" rx="1" />
+              <rect x="16" y="5" width="4" height="4" rx="1" />
+            </svg></div>
+          <h3>Braces</h3>
+          <p>Straighten teeth and improve bite alignment.</p>
+        </article>
+        <article class="service-card">
+          <div class="icon"><svg viewBox="0 0 24 24">
+              <path
+                d="M8 3c-2.5 0-4 1.8-4 4.5C4 12 6.2 20 8.5 20c1.4 0 1.2-3 3.5-3s2.1 3 3.5 3C17.8 20 20 12 20 7.5 20 4.8 18.5 3 16 3c-1.7 0-2.8.8-4 1.8C10.8 3.8 9.7 3 8 3Z" />
+              <path d="m17 3 .5 1.5L19 5l-1.5.5L17 7l-.5-1.5L15 5l1.5-.5Z" />
+            </svg></div>
+          <h3>Teeth Whitening</h3>
+          <p>Brighten your smile safely and effectively.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .transformation-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      border: 1px solid #edf2f7;
+    }
+    .transformation-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+    .ba-images {
+      display: flex;
+      height: 220px;
+      position: relative;
+      border-bottom: 3px solid var(--primary);
+    }
+    .ba-images img {
+      width: 50%;
+      object-fit: cover;
+    }
+    .ba-label {
+      position: absolute;
+      bottom: 10px;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+    .ba-label.before { left: 10px; }
+    .ba-label.after { right: 10px; }
+    .review-body {
+      padding: 25px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .stars {
+      color: #f59e0b;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+    .review-text {
+      font-size: 1rem;
+      color: var(--ink);
+      margin-bottom: 25px;
+      font-style: italic;
+      flex-grow: 1;
+      line-height: 1.6;
+    }
+    .patient-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-top: 1px solid #edf2f7;
+      padding-top: 15px;
+    }
+    .patient-avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      object-fit: cover;
+    }
+    .patient-details h5 {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--ink);
+      margin: 0 0 2px 0;
+    }
+    .patient-details span {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  </style>
+
+  <section id="reviews" class="page-section" style="background-color: #F6F4F0; padding: 100px 0;">
+    <div class="container">
+      
+      <!-- Centered Header -->
+      <div class="row justify-content-center text-center mb-5 pb-3">
+        <div class="col-lg-8">
+          <p class="eyebrow" style="color: var(--muted, #6c757d); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; margin-bottom: 10px;">Kind words from our patients</p>
+          <h2 style="font-family: var(--font-serif, 'Playfair Display', serif); font-size: 3.5rem; color: var(--ink, #1a202c); margin: 0 0 15px 0;">Patient Reviews</h2>
+          <p style="color: var(--muted, #6c757d); font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+            Every smile we care for is part of our story. Here is what our patients have to say.
+          </p>
+        </div>
+      </div>
+      
+      <!-- The 3-Column Grid starts here -->
+      <div class="row g-4 text-start">
+        
+        <!-- Card 1 -->
+        <div class="col-lg-4 col-md-6">
+          <article class="transformation-card">
+            <div class="ba-images">
+              <!-- Replace these srcs with actual static images later -->
+              <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=400&q=80" alt="Before Treatment">
+              <img src="https://images.unsplash.com/photo-1590664216111-7360e2908f23?auto=format&fit=crop&w=400&q=80" alt="After Treatment">
+              <span class="ba-label before">Before</span>
+              <span class="ba-label after">After</span>
+            </div>
+            <div class="review-body">
+              <div class="stars">★★★★★</div>
+              <p class="review-text">"Dr. Pakhare completely transformed my smile. The root canal was painless, and the new crowns look perfectly natural. I can finally smile with confidence again!"</p>
+              <div class="patient-info">
+                <div class="patient-avatar">S</div>
+                <div class="patient-details">
+                  <h5>Sanket S.</h5>
+                  <span>Full Mouth Rehabilitation</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-lg-4 col-md-6">
+          <article class="transformation-card">
+            <div class="ba-images">
+              <img src="https://images.unsplash.com/photo-1598501258838-89269ce33022?auto=format&fit=crop&w=400&q=80" alt="Before Treatment">
+              <img src="https://images.unsplash.com/photo-1536846141366-5d2cb723a105?auto=format&fit=crop&w=400&q=80" alt="After Treatment">
+              <span class="ba-label before">Before</span>
+              <span class="ba-label after">After</span>
+            </div>
+            <div class="review-body">
+              <div class="stars">★★★★★</div>
+              <p class="review-text">"The aligner treatment was fast and effective. The clinic's technology is top-notch, and the staff made every single visit comfortable and welcoming."</p>
+              <div class="patient-info">
+                <div class="patient-avatar" style="background: #10b981;">A</div>
+                <div class="patient-details">
+                  <h5>Anjali M.</h5>
+                  <span>Clear Aligners</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-lg-4 col-md-6">
+          <article class="transformation-card">
+            <div class="ba-images">
+              <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=400&q=80" alt="Before Treatment">
+              <img src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?auto=format&fit=crop&w=400&q=80" alt="After Treatment">
+              <span class="ba-label before">Before</span>
+              <span class="ba-label after">After</span>
+            </div>
+            <div class="review-body">
+              <div class="stars">★★★★★</div>
+              <p class="review-text">"I had severe tooth pain and needed an extraction and an implant. Dr. Pakhare explained the whole process. The result is seamless and feels like my original tooth."</p>
+              <div class="patient-info">
+                <div class="patient-avatar" style="background: #f43f5e;">R</div>
+                <div class="patient-details">
+                  <h5>Rahul K.</h5>
+                  <span>Dental Implant</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Clinic Gallery & Inauguration Section (Infinite Marquee) ═══ -->
+  <section id="gallery" class="page-section" style="background: #ffffff; padding: 78px 0; overflow: hidden;">
+    <div style="max-width: 1120px; margin: 0 auto 40px; text-align: center; padding: 0 24px;">
+      <p class="eyebrow">Moments of pride & excellence</p>
+      <h2 style="font-size: clamp(2.1rem, 4vw, 3.3rem); color: var(--ink); font-family: Georgia, serif; margin: 0;">Our
+        Journey & Clinic Gallery</h2>
+      <p style="color: var(--muted); max-width: 600px; margin: 10px auto 0; font-size: 1.1rem;">Take a glimpse into our
+        clinic inauguration, state-of-the-art dental facilities, and the welcoming environment we've built for you.</p>
+    </div>
+    <div class="ticker-wrap">
+      <div class="ticker-track">
+        <!-- Set 1 (12 Existing Static Images + Dynamic Gallery Images) -->
+        <img src="{% static 'core/images/event_1.jpg' %}" alt="Clinic Gallery Event 1" />
+        <img src="{% static 'core/images/event_2.jpg' %}" alt="Clinic Gallery Event 2" />
+        <img src="{% static 'core/images/event_3.jpg' %}" alt="Clinic Gallery Event 3" />
+        <img src="{% static 'core/images/event_4.jpg' %}" alt="Clinic Gallery Event 4" />
+        <img src="{% static 'core/images/event_5.jpg' %}" alt="Clinic Gallery Event 5" />
+        <img src="{% static 'core/images/event_6.jpg' %}" alt="Clinic Gallery Event 6" />
+        <img src="{% static 'core/images/event_7.jpg' %}" alt="Clinic Gallery Event 7" />
+        <img src="{% static 'core/images/event_8.jpg' %}" alt="Clinic Gallery Event 8" />
+        <img src="{% static 'core/images/event_9.jpg' %}" alt="Clinic Gallery Event 9" />
+        <img src="{% static 'core/images/event_10.jpg' %}" alt="Clinic Gallery Event 10" />
+        <img src="{% static 'core/images/event_11.jpg' %}" alt="Clinic Gallery Event 11" />
+        <img src="{% static 'core/images/event_12.jpg' %}" alt="Clinic Gallery Event 12" />
+        {% for img in gallery_images %}
+        <img src="{{ img.image.url }}" alt="Clinic Gallery Photo" />
+        {% endfor %}
+        <!-- Duplicate Set 2 for seamless infinite CSS scroll -->
+        <img src="{% static 'core/images/event_1.jpg' %}" alt="Clinic Gallery Event 1" />
+        <img src="{% static 'core/images/event_2.jpg' %}" alt="Clinic Gallery Event 2" />
+        <img src="{% static 'core/images/event_3.jpg' %}" alt="Clinic Gallery Event 3" />
+        <img src="{% static 'core/images/event_4.jpg' %}" alt="Clinic Gallery Event 4" />
+        <img src="{% static 'core/images/event_5.jpg' %}" alt="Clinic Gallery Event 5" />
+        <img src="{% static 'core/images/event_6.jpg' %}" alt="Clinic Gallery Event 6" />
+        <img src="{% static 'core/images/event_7.jpg' %}" alt="Clinic Gallery Event 7" />
+        <img src="{% static 'core/images/event_8.jpg' %}" alt="Clinic Gallery Event 8" />
+        <img src="{% static 'core/images/event_9.jpg' %}" alt="Clinic Gallery Event 9" />
+        <img src="{% static 'core/images/event_10.jpg' %}" alt="Clinic Gallery Event 10" />
+        <img src="{% static 'core/images/event_11.jpg' %}" alt="Clinic Gallery Event 11" />
+        <img src="{% static 'core/images/event_12.jpg' %}" alt="Clinic Gallery Event 12" />
+        {% for img in gallery_images %}
+        <img src="{{ img.image.url }}" alt="Clinic Gallery Photo" />
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h3><span style="color:var(--primary)">&#9900;</span> {{ clinic_profile.doctor_name }}</h3>
+        <p>Modern dental care built around your comfort. We treat every patient like family.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><span class="emoji-icon">&#9742;</span> {{ clinic_profile.phone }}</li>
+          <li><span class="emoji-icon">&#9993;</span> {{ clinic_profile.email }}</li>
+          <li><span class="emoji-icon">&#128205;</span> {{ clinic_profile.address }}</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Hours</h4>
+        <ul>
+          <li><span class="emoji-icon">&#128338;</span> {{ clinic_profile.working_hours }}</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Quick links</h4>
+        <ul>
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li><a href="#about">About us</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Dr. Pakhare Dental Clinic. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms of service</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById("navToggle");
+    const nav = document.getElementById("nav");
+    toggle.addEventListener("click", () => nav.classList.toggle("open"));
+
+    // Sticky header shadow on scroll
+    const header = document.getElementById("header");
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          header.classList.toggle("scrolled", window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    // Slider
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    let current = 0;
+    function showSlide(index) {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
+    }
+    dots.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i)));
+    setInterval(() => showSlide(current + 1), 3000);
+  </script>
+
+  <!-- Patient Intercept Modal -->
+  <div class="modal fade" id="patientInterceptModal" tabindex="-1" aria-labelledby="patientInterceptModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+        <div class="modal-header bg-light border-bottom-0 pt-4 px-4">
+          <h5 class="modal-title fw-bold" id="patientInterceptModalLabel" style="color: #0b7a75;">
+            <i class="fa-solid fa-tooth me-2"></i>Book Your Appointment
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4 text-center">
+          <h4 class="fw-bold mb-2" style="color: #1f2937;">Are you a New or Existing Patient?</h4>
+          <p class="text-muted mb-4">Please select how you would like to continue to our booking portal.</p>
+
+          <div class="d-grid gap-3">
+            <a href="{% url 'login' %}" class="btn btn-lg py-3 fw-bold text-white shadow-sm"
+              style="background: #0b7a75; border-radius: 12px; transition: all 0.2s;">
+              <i class="fa-solid fa-right-to-bracket me-2"></i>Existing Patient (Login)
+            </a>
+            <a href="{% url 'register_patient' %}" class="btn btn-lg py-3 fw-bold shadow-sm"
+              style="background: #f5a623; color: white; border-radius: 12px; transition: all 0.2s;">
+              <i class="fa-solid fa-user-plus me-2"></i>New Patient (Register)
+            </a>
+          </div>
+        </div>
+        <div class="modal-footer bg-light border-top-0 justify-content-center py-3">
+          <small class="text-muted">Need urgent help? Call our clinic directly at (555) 123-4567</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const doctorSlides = document.querySelectorAll(".doctor-slider img");
+      if (doctorSlides.length > 1) {
+        let currentSlide = 0;
+        setInterval(() => {
+          doctorSlides[currentSlide].classList.remove("active");
+          currentSlide = (currentSlide + 1) % doctorSlides.length;
+          doctorSlides[currentSlide].classList.add("active");
+        }, 4000);
+      }
+    });
+  </script>
+</body>
+
+</html>

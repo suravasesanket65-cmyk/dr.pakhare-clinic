@@ -1,0 +1,16 @@
+# Python / Django specific
+__pycache__/
+*.pyc
+
+# Virtual Environments
+venv/
+env/
+
+# Secret Environment Variables
+.env
+
+# Database (Optional, but good practice so we don't overwrite the live data)
+db.sqlite3
+
+# User Uploaded Media (The CMS photos we just tested)
+media/

@@ -1,0 +1,36 @@
+from django.urls import path
+# pyrefly: ignore [missing-import]
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('dashboard/', views.clinic_dashboard, name='clinic_dashboard'),
+    path('check-in/<int:appointment_id>/', views.check_in_patient, name='check_in'),
+    path('consultation/<int:appointment_id>/', views.consultation, name='consultation'),
+    path('patient-portal/', views.patient_portal, name='patient_portal'),
+    path('login/', views.login_view, name='login'),
+    path('register/', views.patient_registration, name='register_patient'),
+    path('book-appointment/', views.book_appointment, name='book_appointment'),
+    path('treatment/<int:appointment_id>/', views.treatment, name='treatment'),
+    path('prescription/<int:appointment_id>/', views.prescription, name='prescription'),
+    path('print-prescription/<int:appointment_id>/', views.print_prescription, name='print_prescription'),
+    path('invoice/<int:appointment_id>/', views.invoice, name='invoice'),
+    path('payment/<int:appointment_id>/', views.payment, name='payment'),
+    path('refund/<int:payment_id>/', views.process_refund, name='process_refund'),
+    path('print-receipt/<int:appointment_id>/', views.print_receipt, name='print_receipt'),
+    path('logout/', views.logout_view, name='logout'),
+    path('patients/', views.patient_list, name='patient_list'),
+    path('appointments/', views.appointment_list, name='appointment_list'),
+    path('cancel/<int:appointment_id>/', views.cancel_appointment, name='cancel_appointment'),
+    path('reschedule/<int:appointment_id>/', views.reschedule_appointment, name='reschedule_appointment'),
+    path('dashboard/cms/', views.manage_cms, name='manage_cms'),
+    path('settings/', views.clinic_settings, name='clinic_settings'),
+    path('staff/', views.staff_management, name='staff_management'),
+    path('doctors/', views.doctor_management, name='doctor_management'),
+    path('reports/', views.reports_center, name='reports_center'),
+    path('generate-report/', views.generate_csv_report, name='generate_csv_report'),
+    path('backup-database/', views.backup_database, name='backup_database'),
+    path('audit-logs/', views.audit_logs, name='audit_logs'),
+    path('api/get-slots/', views.get_available_slots, name='get_available_slots'),
+    path('schedule/', views.master_schedule, name='master_schedule'),
+]
